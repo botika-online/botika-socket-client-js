@@ -6,126 +6,89 @@ Javascript Library for interacting with the Botika Socket Client.
 
 ## Installation
 
-You can get the Botika Socket Client via a npm package called `socket`. See <https://packagist.org/packages/botika/socket>
+### Web
+
+If you're using Botika Socket Client on a web page, you can install the library via:
+
+#### Yarn (or NPM)
+
+You can use any NPM-compatible package manager, including NPM itself and Yarn.
 
 ```bash
-composer require botika/socket
+npm i botika-socket-client
 ```
 
-Or add to `composer.json`:
+Then:
 
-```json
-"require": {
-    "botika/socket": "^1.0"
-}
+```javascript
+import Socket from 'botika-socket-client';
 ```
 
-then run `composer update`.
+Or, if you're not using ES6 modules:
 
-## Supported platforms
-
-* PHP - supports PHP versions 7.0, and above.
-
-## Botika Socket constructor
-
-Use the credentials from your Botika Socket application to create a new `Botika\Socket` instance.
-
-```php
-$username = 'USERNAME';
-$password = 'PASSWORD';
-$auth = new \Botika\Socket\Auth($username, $password);
-
-// Options get from https://docs.guzzlephp.org/en/stable/request-options.html
-$options = [];
-
-// Initialize socket
-$socket = new \Botika\Socket\Socket($auth, $options);
+```javascript
+const Socket = require('botika-socket-client');
 ```
 
-The second parameter is an `$options` array. The additional options get from <https://docs.guzzlephp.org/en/stable/request-options.html>
+#### UNPKG
 
-For example, by default calls will be made over HTTPS. To use plain
-HTTP you can set verify to false:
-
-```php
-$options = [
-  'base_uri' => 'https://socket.botika.online',
-  'verify' => true
-];
-$socket = new \Botika\Socket\Socket($auth, $options);
+```html
+<script src="https://unpkg.com/botika-socket-client/dist/socket.js"></script>
 ```
 
-## Logging configuration
+### Typescript
 
-The recommended approach of logging is to use a
-[PSR-3](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md)
-compliant logger implementing `Psr\Log\LoggerInterface`. The `Pusher` object
-implements `Psr\Log\LoggerAwareInterface`, meaning you call
-`setLogger(LoggerInterface $logger)` to set the logger instance.
+We've provided typescript declarations since v1.x.x. Most things should work
+out of the box but if you need access to specific types you can import them
+like so:
 
-```php
-// where $logger implements `LoggerInterface`
+```typescript
+import Socket from 'botika-socket-client';
+import * as SocketTypes from 'botika-socket-client';
 
-$socket->setLogger($logger);
+var options: SocketTypes.SocketOptions;
+...
 ```
 
-## Publishing/Triggering events
+## Initialization
 
-To trigger an event on one or more channels use the `trigger` function.
-
-### A single channel
-
-```php
-$socket->trigger('my-channel', 'my_event', 'hello world');
+```javascript
+const baseURL = 'https://socket.example.com';
+const auth = { token: 'JWT_TOKEN' };
+const socket = new Socket(baseURL, auth);
 ```
 
-### Multiple channels
+## Subscribing to channels
 
-```php
-$pusher->trigger([ 'channel-1', 'channel-2' ], 'my_event', 'hello world');
+### Public channels
+
+The default method for subscribing to a channel involves invoking the `channel` method of your socket object:
+
+```js
+// Options get from https://socket.io/docs/v4/client-options/
+const options = {};
+const channel = socket.channel('my-channel', options);
 ```
 
-### Asynchronous interface
+This returns a Channel object which events can be bound to.
 
-Both `trigger` have asynchronous counterparts in `triggerAsync`. These functions return [Guzzle
-promises](https://github.com/guzzle/promises) which can be chained
-with `->then`:
+## Binding to events
 
-```php
-$promise = $socket->triggerAsync(['channel-1', 'channel-2'], 'my_event', 'hello world');
-$promise->then(
-    function (ResponseInterface $res) {
-        echo $res->getStatusCode() . "\n";
-    },
-    function (RequestException $e) {
-        echo $e->getMessage() . "\n";
-        echo $e->getRequest()->getMethod();
-    }
-);
-$promise->wait();
+Event binding takes a very similar form to the way events are handled in socket.io-client. You can use the following methods either on a channel object, to bind to events on a particular channel; or on the socket object, to bind to events on all subscribed channels simultaneously.
+
+### `on` and `off`
+
+Binding to "new-message" on channel: The following logs message data to the console when "new-message" is received
+
+```javascript
+channel.on('new-message', function (data) {
+  console.log(data.message);
+});
 ```
 
-### Arrays
+Unsubscribe behaviour varies depending on which parameters you provide it with. For example:
 
-Arrays are automatically converted to JSON format:
-
-```php
-$array['name'] = 'joe';
-$array['message_count'] = 23;
-
-$socket->trigger('my_channel', 'my_event', $array);
+```javascript
+// Remove just `handler` for the `new-comment` event
+channel.off('new-comment', handler);
 ```
-
-The output of this will be:
-
-```json
-"{'name': 'joe', 'message_count': 23}"
-```
-
-## License
-
-Copyright 2014, Pusher. Licensed under the MIT license:
-<http://www.opensource.org/licenses/mit-license.php>
-
-Copyright 2010, Squeeks. Licensed under the MIT license:
-<http://www.opensource.org/licenses/mit-license.php>
