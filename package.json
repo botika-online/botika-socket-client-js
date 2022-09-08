@@ -19,7 +19,7 @@
     "socket"
   ],
   "author": "Andri Anto",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/botika-online/botika-socket-client-js/issues"
   },
