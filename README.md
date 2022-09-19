@@ -33,7 +33,7 @@ const Socket = require('botika-socket-client');
 #### UNPKG
 
 ```html
-<script src="https://unpkg.com/botika-socket-client/dist/socket.js"></script>
+<script src="https://unpkg.com/botika-socket-client"></script>
 ```
 
 ### Typescript

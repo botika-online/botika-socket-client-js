@@ -1,17 +1,16 @@
 {
   "name": "botika-socket-client",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Botika Socket Client for Javascript",
-  "type": "module",
   "files": [
     "dist"
   ],
-  "main": "./dist/botika-socket-client.umd.cjs",
-  "module": "./dist/botika-socket-client.js",
+  "main": "./dist/botika-socket-client.js",
+  "module": "./dist/botika-socket-client.mjs",
   "exports": {
     ".": {
-      "import": "./dist/botika-socket-client.js",
-      "require": "./dist/botika-socket-client.umd.cjs"
+      "import": "./dist/botika-socket-client.mjs",
+      "require": "./dist/botika-socket-client.js"
     }
   },
   "scripts": {
