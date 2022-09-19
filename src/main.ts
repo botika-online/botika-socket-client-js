@@ -1,6 +1,6 @@
 import { io, ManagerOptions, Socket, SocketOptions } from 'socket.io-client';
 
-class SocketClient {
+export default class BotikaSocketClient {
 	private auth: {
 		[key: string]: any;
 	} | ((cb: (data: object) => void) => void);
@@ -38,16 +38,3 @@ class SocketClient {
 		}));
 	}
 }
-
-function client(baseUrl: string, auth: {
-	[key: string]: any;
-} | ((cb: (data: object) => void) => void)) {
-	return new SocketClient(baseUrl, auth);
-}
-
-/**
- * Expose constructors for standalone build.
- *
- * @public
- */
-export { ManagerOptions, client, client as default, Socket, SocketOptions };
