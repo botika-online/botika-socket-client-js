@@ -34,6 +34,8 @@ const Socket = require('botika-socket-client');
 
 ```html
 <script src="https://unpkg.com/botika-socket-client"></script>
+
+window.BotikaSocketCLient(url, { token: tokenJWT })
 ```
 
 ### Typescript
